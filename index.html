@@ -1,0 +1,2615 @@
+<!DOCTYPE html>
+  <html lang="zh-CN">
+    <head>
+      <meta charset="UTF-8">
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <title>
+        团子动漫社动漫知识问答挑战
+      </title>
+      <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #1a2a6c, #b21f1f, #fdbb2d);
+            color: white;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 2rem;
+        }
+        
+        .container {
+            max-width: 800px;
+            width: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            border-radius: 15px;
+            padding: 2rem;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+            position: relative;
+        }
+        
+        h1 {
+            text-align: center;
+            margin-bottom: 1.5rem;
+            font-size: 2.5rem;
+            text-shadow: 0 2px 5px rgba(0, 0, 0, 0.5);
+            color: #ffcc00;
+        }
+        
+        .description {
+            text-align: center;
+            margin-bottom: 2rem;
+            line-height: 1.6;
+        }
+        
+        .game-area {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+        
+        .selection-screen, .question-screen {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+        
+        h2 {
+            color: #4fc3f7;
+            border-bottom: 2px solid #4fc3f7;
+            padding-bottom: 0.5rem;
+            margin-bottom: 1rem;
+        }
+        
+        .topics {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+        
+        .topic-card {
+            background: rgba(30, 30, 60, 0.8);
+            border-radius: 10px;
+            padding: 1.5rem;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: 2px solid transparent;
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+        
+        .topic-card:hover {
+            transform: translateY(-5px);
+            border-color: #4fc3f7;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+        }
+        
+        .topic-card.selected {
+            border-color: #ffcc00;
+            background: rgba(40, 40, 80, 0.9);
+        }
+        
+        .topic-title {
+            font-size: 1.2rem;
+            font-weight: bold;
+        }
+        
+        .topic-count {
+            font-size: 0.9rem;
+            color: #4fc3f7;
+        }
+        
+        .topic-description {
+            font-size: 0.9rem;
+            color: #b0b0b0;
+            margin-top: 0.5rem;
+        }
+        
+        .question-container {
+            background: rgba(30, 30, 60, 0.8);
+            border-radius: 10px;
+            padding: 1.5rem;
+            margin-bottom: 1rem;
+        }
+        
+        .question-text {
+            font-size: 1.3rem;
+            line-height: 1.6;
+            margin-bottom: 1.5rem;
+        }
+        
+        .question-image {
+            margin: 1rem 0;
+            text-align: center;
+        }
+        
+        .question-image img {
+            max-width: 100%;
+            max-height: 300px;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+        }
+        
+        .options-container {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+        
+        .option-btn {
+            padding: 0.8rem;
+            border: 2px solid #4fc3f7;
+            border-radius: 8px;
+            background: rgba(30, 30, 60, 0.8);
+            color: white;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        
+        .option-btn:hover {
+            background: rgba(79, 195, 247, 0.2);
+            transform: translateY(-3px);
+        }
+        
+        .option-btn.selected {
+            border-color: #ffcc00;
+            background: rgba(255, 204, 0, 0.1);
+        }
+        
+        .option-btn.correct {
+            border-color: #4caf50;
+            background: rgba(76, 175, 80, 0.2);
+        }
+        
+        .option-btn.incorrect {
+            border-color: #f44336;
+            background: rgba(244, 67, 54, 0.2);
+        }
+        
+        .option-image {
+            width: 100%;
+            height: 120px;
+            object-fit: contain;
+            margin-bottom: 0.5rem;
+            border-radius: 4px;
+        }
+        
+        .controls {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+        
+        button {
+            padding: 0.8rem 1.5rem;
+            border: none;
+            border-radius: 50px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .btn-primary {
+            background: #4fc3f7;
+            color: #0d1b2a;
+        }
+        
+        .btn-primary:hover {
+            background: #29b6f6;
+            transform: translateY(-2px);
+        }
+        
+        .btn-secondary {
+            background: #ff9800;
+            color: #0d1b2a;
+        }
+        
+        .btn-secondary:hover {
+            background: #f57c00;
+            transform: translateY(-2px);
+        }
+        
+        .btn-success {
+            background: #4caf50;
+            color: white;
+        }
+        
+        .btn-success:hover {
+            background: #388e3c;
+            transform: translateY(-2px);
+        }
+        
+        .hint-area, .answer-area {
+            background: rgba(40, 40, 80, 0.9);
+            border-radius: 10px;
+            padding: 1rem;
+            margin-top: 1rem;
+            display: none;
+        }
+        
+        .hint-area.show, .answer-area.show {
+            display: block;
+            animation: fadeIn 0.5s ease;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .score-display {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: rgba(0, 0, 0, 0.7);
+            padding: 0.8rem 1.2rem;
+            border-radius: 20px;
+            font-size: 1.1rem;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .score-text {
+            color: #ffcc00;
+        }
+        
+        .reset-score {
+            background: #f44336;
+            color: white;
+            border: none;
+            border-radius: 15px;
+            padding: 0.3rem 0.8rem;
+            font-size: 0.8rem;
+            cursor: pointer;
+        }
+        
+        .answer-feedback {
+            display: none;
+            gap: 1rem;
+            justify-content: center;
+            margin-top: 1rem;
+        }
+        
+        .feedback-btn {
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            cursor: pointer;
+        }
+        
+        .correct-feedback {
+            background: #4caf50;
+            color: white;
+        }
+        
+        .incorrect-feedback {
+            background: #f44336;
+            color: white;
+        }
+        
+        .error {
+            color: #f44336;
+            font-style: italic;
+        }
+        
+        .footer {
+            margin-top: 2rem;
+            text-align: center;
+            color: #b0b0b0;
+            font-size: 0.9rem;
+        }
+        
+        @media (max-width: 600px) {
+            .options-container {
+                grid-template-columns: 1fr;
+            }
+            
+            .score-display {
+                position: static;
+                margin: 0 auto 1rem;
+                width: fit-content;
+            }
+        }
+      </style>
+    </head>
+    <body>
+      <!-- 全局计分显示 -->
+        <div class="score-display">
+          <span class="score-text">
+            得分:
+            <span id="correctCount">
+              0
+            </span>
+            /
+            <span id="totalAnswered">
+              0
+            </span>
+          </span>
+          <button class="reset-score" id="resetScore">
+            重置
+          </button>
+        </div>
+        <div class="container">
+          <h1>
+            团子动漫社动漫知识问答挑战
+          </h1>
+          <div class="description">
+            <p>
+              自选3个题库，题库内随机抽题，每个题库最多可答10道题。
+            </p>
+          </div>
+          <div class="game-area">
+            <!-- 题库选择界面 -->
+              <div class="selection-screen" id="selectionScreen">
+                <h2>
+                  请选择题库
+                </h2>
+                <div class="topics" id="topicsContainer">
+                  <!-- 题库卡片将通过JavaScript动态生成 -->
+                  </div>
+                  <div class="controls">
+                    <button class="btn-primary" id="startBtn">
+                      开始挑战
+                    </button>
+                  </div>
+                </div>
+                <!-- 问题界面 -->
+                  <div class="question-screen" id="questionScreen" style="display: none;">
+                    <h2 id="topicTitle">
+                      角色扮演游戏
+                    </h2>
+                    <div class="question-container">
+                      <div class="question-text" id="questionText">
+                        问题将显示在这里...
+                      </div>
+                      <div class="question-image" id="questionImage">
+                      </div>
+                      <div class="options-container" id="optionsContainer">
+                      </div>
+                      <div class="controls">
+                        <button class="btn-primary" id="hintBtn">
+                          显示提示
+                        </button>
+                        <button class="btn-secondary" id="answerBtn">
+                          显示答案
+                        </button>
+                        <button class="btn-success" id="nextBtn">
+                          下一题
+                        </button>
+                      </div>
+                    </div>
+                    <div class="hint-area" id="hintArea">
+                      <h3>
+                        提示
+                      </h3>
+                      <p id="hintText">
+                        提示将显示在这里...
+                      </p>
+                    </div>
+                    <div class="answer-area" id="answerArea">
+                      <h3>
+                        答案
+                      </h3>
+                      <p id="answerText">
+                        答案将显示在这里...
+                      </p>
+                      <!-- 问答题反馈按钮 -->
+                        <div class="answer-feedback" id="answerFeedback">
+                          <button class="feedback-btn correct-feedback" id="correctBtn">
+                            我答对了
+                          </button>
+                          <button class="feedback-btn incorrect-feedback" id="incorrectBtn">
+                            我答错了
+                          </button>
+                        </div>
+                      </div>
+                      <div class="controls">
+                        <button class="btn-secondary" id="backBtn">
+                          返回选题
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="footer">
+                    <p>
+                      不知道写什么了 | 请输入文本
+                    </p>
+                  </div>
+                </div>
+                <script>
+                  // 题库数据
+        const questionBanks = {
+
+                oshi: {
+                title: "我推的孩子",
+                description: "谎言亦是爱",
+                questions: [
+// 题目1（题干配图问答题）
+{
+    question: "这个角色叫什么？",
+    image: "images/oshi-1-0.webp", // 题干配图
+    hint: "永远18岁的up主",
+    answer: "MEM啾"
+},
+
+// 题目2（题干配图问答题）
+{
+    question: "阿库亚的全名叫什么？",
+    image: "images/oshi-2-0.webp", // 题干配图
+    hint: "不是星野阿库亚",
+    answer: "星野爱久爱海"
+},
+
+// 题目3（题干配图问答题）
+{
+    question: "露比的全名叫什么？",
+    image: "images/oshi-3-0.webp", // 题干配图
+    hint: "不是星野露比",
+    answer: "星野瑠美衣"
+},
+
+// 题目4（题干配图选择题）
+{
+    question: "下面哪一首是第一季的OP？",
+    image: "images/oshi-4-0.webp", // 题干配图
+    options: [
+        { text: "アイドル/偶像" },
+        { text: "メフィスト/梅菲斯特" },
+        { text: "ファタール/fatal" },
+        { text: "Burning" }
+    ],
+    correctOption: 0, // アイドル是第1个选项
+    answer: "アイドル/偶像"
+},
+
+// 题目5（题干配图选择题）
+{
+    question: "阿库亚举着的白色是谁的应援色？",
+    image: "images/oshi-5-0.webp", // 题干配图
+    options: [
+        { text: "星野爱" },
+        { text: "星野露比" },
+        { text: "有马加奈" },
+        { text: "MEM啾" }
+    ],
+    correctOption: 2, // 有马加奈是第3个选项
+    answer: "有马加奈"
+},
+
+// 题目6（题干配图问答题）
+{
+    question: "在第二季中，众人演出的舞台剧叫什么名字？",
+    image: "images/oshi-6-0.webp", // 题干配图
+    hint: "東京ブレード",
+    answer: "东京之刃/东京刀鬼/东京BLADE"
+},
+
+// 题目7（题干配图问答题）
+{
+    question: "星野爱临终前最后一句话是什么？",
+    image: "images/oshi-7-0.webp", // 题干配图
+    hint: "露比，阿库亚，_____",
+    answer: "露比，阿库亚，我爱你们。这句话，绝对不是谎言……"
+},
+
+// 题目8（题干配图问答题）
+{
+    question: "'如果我说，我成为演员的目的是为了杀人的话，你会怎么做？'",
+    image: "images/oshi-8-0.webp", // 题干配图
+    hint: "共犯宣言",
+    answer: "跟你一起去杀了他"
+},
+
+// 题目9（题干配图问答题）
+{
+    question: "星野爱所属的偶像团体叫什么名字？",
+    image: "images/oshi-9-0.webp", // 题干配图
+    hint: "代号是B！",
+    answer: "B小町"
+},
+
+// 题目10（题干配图选择题）
+{
+    question: "在第二季的舞台剧中，出演'鞘姬'的是谁？",
+    image: "images/oshi-10-0.webp", // 题干配图
+    options: [
+        { text: "星野露比" },
+        { text: "有马加奈" },
+        { text: "MEM啾" },
+        { text: "黑川赤音" }
+    ],
+    correctOption: 3, // 黑川赤音是第4个选项
+    answer: "黑川赤音"
+}
+                ]
+            },
+
+                bocchi: {
+                title: "孤独摇滚",
+                description: "要是放弃了个性，就跟死去没两样",
+                questions: [
+// 题目1（题干配图问答题）
+{
+    question: "《孤独摇滚》中，波奇的狗叫什么？",
+    image: "images/bocchi-1-0.webp", // 题干配图
+    hint: "三个字",
+    answer: "吉米亨"
+},
+
+// 题目2（无配图选择题）
+{
+    question: "虹夏的手机壳上是什么动物？",
+    hint: "手机壳是红色+黄色+白色的",
+    options: [
+        { text: "小鸡" },
+        { text: "小鸭" },
+        { text: "小狗" },
+        { text: "金坷垃" }
+    ],
+    correctOption: 1, // 小鸭是第2个选项
+    answer: "小鸭"
+},
+
+// 题目3（无配图选择题）
+{
+    question: "波奇的手机壳上是什么水果？",
+    hint: "黑白色",
+    options: [
+        { text: "苹果" },
+        { text: "梨" },
+        { text: "西瓜" },
+        { text: "没有手机壳" }
+    ],
+    correctOption: 3, // 没有手机壳是第4个选项
+    answer: "没有手机壳！但是是梨子手机，这是一道陷阱题"
+},
+
+// 题目4（题干配图问答题）
+{
+    question: "动画中波奇新买吉他是什么牌子的？",
+    image: "images/bocchi-4-0.webp", // 题干配图
+    hint: "黑色吉他",
+    answer: "雅马哈/Yamaha（Gibson是爸爸送的那把吉他）"
+},
+
+// 题目5（无配图选择题）
+{
+    question: "虹夏和波奇第一次相遇时背着什么颜色的包？",
+    hint: "双肩包背在身后",
+    options: [
+        { text: "黄色" },
+        { text: "天蓝色" },
+        { text: "红色" },
+        { text: "白色" }
+    ],
+    correctOption: 0, // 黄色是第1个选项
+    answer: "黄色"
+},
+
+// 题目6（无配图问答题）
+{
+    question: "波奇的发饰是哪两种颜色？",
+    hint: "两个方形",
+    answer: "蓝色、黄色"
+},
+
+// 题目7（题干配图问答题）
+{
+    question: "喜多的四字雅称是什么？",
+    image: "images/bocchi-7-0.webp", // 题干配图
+    hint: "文言文，不是喜多郁代",
+    answer: "归去来兮"
+},
+
+// 题目8（题干配图问答题）
+{
+    question: "波奇向凉咨询作词的事情时，被迫请凉吃了什么？",
+    image: "images/bocchi-8-0.webp", // 题干配图
+    hint: "用勺子吃的",
+    answer: "咖喱饭"
+},
+
+// 题目9（无配图选择题）
+{
+    question: "虹夏的呆毛最接近于什么形状？",
+    options: [
+        { text: "方形" },
+        { text: "三角形" },
+        { text: "圆形" },
+        { text: "闪电形" }
+    ],
+    correctOption: 1, // 三角形是第2个选项
+    answer: "三角形"
+},
+
+// 题目10（无配图选择题）
+{
+    question: "波奇的存钱罐是什么颜色为主色的？",
+    options: [
+        { text: "粉色" },
+        { text: "绿色" },
+        { text: "黄色" },
+        { text: "白色" }
+    ],
+    correctOption: 3, 
+    answer: "白色（一只小猪，乐队商量打工时波奇由于不想打工而主动献出）"
+},
+
+// 题目11（无配图选择题）
+{
+    question: "结束乐队第一次正式live的指标是一人几张票？",
+    hint: "波奇掰着手指把家里人数了一遍发现还差一张",
+    options: [
+        { text: "3" },
+        { text: "4" },
+        { text: "5" },
+        { text: "6" }
+    ],
+    correctOption: 2, // 5是第3个选项
+    answer: "5（波奇掰着手指把家里人数了一遍发现还差一张）"
+},
+
+// 题目12（无配图问答题）
+{
+    question: "凉的头发上的发饰是几条杠？",
+    hint: "黑色的发夹",
+    answer: "2"
+},
+
+// 题目13（无配图选择题）
+{
+    question: "结束乐队的经费是由谁管理？",
+    hint: "一个靠谱的人",
+    options: [
+        { text: "喜多" },
+        { text: "波奇" },
+        { text: "虹夏" },
+        { text: "凉" }
+    ],
+    correctOption: 2, // 虹夏是第3个选项
+    answer: "虹夏"
+},
+
+// 题目14（无配图问答题）
+{
+    question: "波奇第一次上台演出套着什么纸箱？",
+    hint: "四个字",
+    answer: "完熟芒果"
+},
+
+// 题目15（无配图选择题）
+{
+    question: "波奇第一次看着顾客的眼睛卖出的饮料是一杯什么？",
+    hint: "在STARRY的饮料吧打工",
+    options: [
+        { text: "可乐" },
+        { text: "乌龙茶" },
+        { text: "橙汁" },
+        { text: "嗨棒" }
+    ],
+    correctOption: 2, // 橙汁是第3个选项
+    answer: "橙汁（在STARRY的饮料吧打工）"
+},
+
+// 题目16（无配图选择题）
+{
+    question: "剧中波奇和喜多第一次对话是在哪里？",
+    hint: "波奇对着喜多rap了一段",
+    options: [
+        { text: "教室走廊" },
+        { text: "校门口" },
+        { text: "教室内" },
+        { text: "楼梯隔间" }
+    ],
+    correctOption: 3, // 楼梯隔间是第4个选项
+    answer: "楼梯隔间（波奇对着喜多rap了一段）"
+},
+
+// 题目17（题干配图选择题）
+{
+    question: "为什么喜多一开始一直学不会吉他？",
+    image: "images/bocchi-17-0.webp", // 题干配图
+    options: [
+        { text: "没有人教" },
+        { text: "没有练习" },
+        { text: "因为是小笨蛋" },
+        { text: "因为买的是贝斯" }
+    ],
+    correctOption: 3, // 因为买的是贝斯是第4个选项
+    answer: "因为买的是贝斯"
+},
+
+// 题目18（题干配图选择题）
+{
+    question: "试演前一晚，虹夏在这里追上波奇后请波奇喝了什么饮料？",
+    hint: "虹夏对波奇说了她有个梦想",
+    image: "images/bocchi-18-0.webp", // 题干配图
+    options: [
+        { text: "生命之水" },
+        { text: "橙汁" },
+        { text: "雪碧" },
+        { text: "可乐" }
+    ],
+    correctOption: 3, // 可乐是第4个选项
+    answer: "可乐（虹夏对波奇说了她有个梦想）"
+},
+
+// 题目19（题干配图选择题）
+{
+    question: "波奇的妹妹后藤偶在动画第一季中几岁？",
+    image: "images/bocchi-19-0.webp", // 题干配图
+    options: [
+        { text: "婴幼儿" },
+        { text: "3岁" },
+        { text: "5岁" },
+        { text: "10岁" }
+    ],
+    correctOption: 2, // 5岁是第3个选项
+    answer: "5岁"
+},
+
+// 题目20（无配图选择题）
+{
+    question: "去波奇家中商量队服时，谁不在？",
+    options: [
+        { text: "喜多" },
+        { text: "波奇" },
+        { text: "虹夏" },
+        { text: "凉" }
+    ],
+    correctOption: 3, // 凉是第4个选项
+    answer: "凉"
+},
+
+// 题目21（无配图选择题）
+{
+    question: "结束乐队的队服是谁的设计？",
+    options: [
+        { text: "喜多" },
+        { text: "波奇" },
+        { text: "虹夏" },
+        { text: "凉" }
+    ],
+    correctOption: 2, // 虹夏是第3个选项
+    answer: "虹夏"
+}
+                ]
+            },
+
+                yourlie: {
+                title: "四月是你的谎言",
+                description: "再也没有你的春天，就要来了",
+                questions: [
+// 题目1（无配图选择题）
+{
+    question: "动画《四月是你的谎言》中，有马公生与宫园薰在现实中一共合奏过几次？",
+    options: [
+        { text: "1" },
+        { text: "2" },
+        { text: "3" },
+        { text: "4" }
+    ],
+    correctOption: 0, // 1是第1个选项
+    answer: "1（初看题目可能会有点迷惑，仔细一想，他俩真的只合奏过一次。于动画第四话《启程》。动画最后一话中的合奏演出并非现实中的合奏。）"
+},
+
+// 题目2（题干配图问答题）
+{
+    question: "动画《四月是你的谎言》中，女主角宫园薰最喜欢的甜点是？",
+    image: "images/yourlie-2-0.webp", // 题干配图
+    hint: "1.一种法式甜点。2.三个字。3.燕园的面包店有得卖",
+    answer: "可露丽。很好吃，推荐给大伙。"
+},
+
+// 题目3（无配图问答题）
+{
+    question: "动画《四月是你的谎言》中，女主角宫园薰对有马公生的日常称呼是？",
+    hint: "1.薰通常不会直呼公生的名字。2.这种称呼是动画第二话的标题",
+    answer: "“你”，或者“友人A”。为了维护自己的'谎言'，薰通常不会称呼公生为“有马公生君”。另一种理解为，体现薰将自己看作公生生命中的过客，但又希望能“住进心房”的矛盾心情。"
+},
+
+// 题目4（题干配图选择题）
+{
+    question: "动画《四月是你的谎言》中，泽部椿询问宫园薰“为什么要拼命帮助公生”，宫园薰的回答是“认为公生像自己的__一样”",
+    image: "images/yourlie-4-0.webp", // 题干配图
+    options: [
+        { text: "家人" },
+        { text: "恋人" },
+        { text: "哥哥" },
+        { text: "弟弟" }
+    ],
+    correctOption: 3, // 弟弟是第4个选项
+    answer: "弟弟（这里面的表达隐含的意思可能是，“我对公生的情感和你一样”。“弟弟”也将成为椿的情感变化的一个重要的关键词）"
+},
+
+// 题目5（题干配图选择题）
+{
+    question: "动画《四月是你的谎言》中，有马公生因为什么原因而无法再听见自己弹奏的钢琴声？",
+    image: "images/yourlie-5-0.webp", // 题干配图
+    options: [
+        { text: "一次严重的舞台事故" },
+        { text: "母亲的去世" },
+        { text: "一场大病" },
+        { text: "宫园薰拒绝了他的表白" }
+    ],
+    correctOption: 1, // 母亲的去世是第2个选项
+    answer: "母亲的去世"
+},
+
+// 题目6（题干配图选择题）
+{
+    question: "动画《四月是你的谎言》中，在故事的最后，有马公生收到了一封来自宫园薰的信，这封信是在什么情况下写的？",
+    image: "images/yourlie-6-0.webp", // 题干配图
+    options: [
+        { text: "她第一次见到公生时" },
+        { text: "她与公生第一次合奏后" },
+        { text: "她与公生第一次约会后" },
+        { text: "她即将进行手术前" }
+    ],
+    correctOption: 3, // 她即将进行手术前是第4个选项
+    answer: "她即将进行手术前"
+}
+                ]
+            },
+
+                eupho: {
+                title: "吹响吧！上低音号",
+                description: "然后，下一首曲子即将奏响",
+                questions: [
+// 题目1（无配图选择题）
+{
+    question: "《吹响吧！上低音号》塚本秀一高中时的乐器是？",
+    options: [
+        { text: "小号" },
+        { text: "大号" },
+        { text: "长号" },
+        { text: "上低音号" }
+    ],
+    correctOption: 2, // 长号是第3个选项
+    answer: "长号"
+},
+
+// 题目2（无配图选择题）
+{
+    question: "《吹响吧！上低音号》久美子第一次听到高中演奏时的反应是什么？",
+    options: [
+        { text: "想吹得更好" },
+        { text: "这完全不行" },
+        { text: "苦呀西（久美子的悲鸣太美味了）" },
+        { text: "部长失格" }
+    ],
+    correctOption: 1, // 这完全不行是第2个选项
+    answer: "这完全不行"
+},
+
+// 题目3（无配图选择题）
+{
+    question: "《吹响吧！上低音号》久一年的部长使用什么乐器？",
+    options: [
+        { text: "双簧管" },
+        { text: "萨克斯" },
+        { text: "黑管" },
+        { text: "巴松" }
+    ],
+    correctOption: 1, // 萨克斯是第2个选项
+    answer: "萨克斯"
+},
+
+// 题目4（无配图选择题）
+{
+    question: "《吹响吧！上低音号》久美子所在学校三年的最高奖项没有哪一个？",
+    options: [
+        { text: "关西金" },
+        { text: "全国铜" },
+        { text: "全国银" },
+        { text: "全国金" }
+    ],
+    correctOption: 2, // 全国银是第3个选项
+    answer: "全国银"
+},
+
+// 题目5（无配图选择题）
+{
+    question: "《吹响吧！上低音号》系列没有演奏过哪一首曲目？（简单版）",
+    options: [
+        { text: "莉兹与青鸟" },
+        { text: "三日月之舞" },
+        { text: "鞑靼人舞曲" },
+        { text: "皇家烟火" }
+    ],
+    correctOption: 3, // 皇家烟火是第4个选项
+    answer: "皇家烟火"
+},
+
+// 题目6（无配图选择题）
+{
+    question: "《吹响吧！上低音号》系列没有演奏过哪一首曲目？（困难版）",
+    options: [
+        { text: "西西里舞曲" },
+        { text: "波莱罗" },
+        { text: "宝岛" },
+        { text: "地狱中的奥菲欧" }
+    ],
+    correctOption: 0, // 西西里舞曲是第1个选项
+    answer: "西西里舞曲"
+},
+
+// 题目7（无配图选择题）
+{
+    question: "《吹响吧！上低音号》故事发生的高校是以下的哪一所？",
+    options: [
+        { text: "帝丹高校" },
+        { text: "北宇治高校" },
+        { text: "东宇治高校" },
+        { text: "总武高校" }
+    ],
+    correctOption: 1, // 北宇治高校是第2个选项
+    answer: "北宇治高校"
+},
+
+// 题目8（无配图选择题）
+{
+    question: "《吹响吧！上低音号》动漫中第一个发出“苦呀西”悲鸣的是谁？",
+    options: [
+        { text: "吉川优子" },
+        { text: "黄前久美子" },
+        { text: "高坂丽奈" },
+        { text: "久石奏" }
+    ],
+    correctOption: 2, // 高坂丽奈是第3个选项
+    answer: "高坂丽奈"
+},
+
+// 题目9（无配图选择题）
+{
+    question: "在《吹响吧！上低音号3》的魔幻难绷剧情——久美子和黑江真由的soli对决中，谁把票投给了黑江真由？",
+    options: [
+        { text: "川岛绿辉" },
+        { text: "剑崎梨梨花" },
+        { text: "加藤叶月" },
+        { text: "久石奏" }
+    ],
+    correctOption: 2, 
+    answer: "加藤叶月"
+},
+
+// 题目10（无配图选择题）
+{
+    question: "《吹响吧！上低音号》久美子和丽奈在大吉山北中的最后一次比赛成绩是？",
+    options: [
+        { text: "京都金" },
+        { text: "关西铜" },
+        { text: "关西银" },
+        { text: "关西金" }
+    ],
+    correctOption: 0, 
+    answer: "京都金"
+},
+
+// 题目11（无配图选择题）
+{
+    question: "《吹响吧！上低音号》中，有伞木希美与铠冢霙核心独奏部分的参赛曲是？",
+    options: [
+        { text: "鞑靼人舞曲" },
+        { text: "爱之梦" },
+        { text: "宝岛" },
+        { text: "莉兹与青鸟" }
+    ],
+    correctOption: 3, // 莉兹与青鸟是第4个选项
+    answer: "莉兹与青鸟（双簧管与长笛独奏。同时也是外传动画电影作品名。）"
+}
+                ]
+            },
+
+                oregairu: {
+                title: "我的青春恋爱物语果然有问题",
+                description: "即便如此，我也想要真物",
+                questions: [
+// 题目1（无配图选择题）
+{
+    question: "《我的青春恋爱物语果然有问题》中，大老师曾说：“青春是谎言，是罪恶。”他的结论是想成为什么动物？",
+    options: [
+        { text: "企鹅" },
+        { text: "熊" },
+        { text: "狐狸" },
+        { text: "人类" }
+    ],
+    correctOption: 1, // 熊是第2个选项
+    answer: "熊"
+},
+
+// 题目2（无配图选择题）
+{
+    question: "《我的青春恋爱物语果然有问题》中，大老师反思了自己对谁擅自期待又擅自失望的态度？",
+    options: [
+        { text: "雪之下雪乃" },
+        { text: "由比滨结衣" },
+        { text: "两者都有" },
+        { text: "并非对此二人" }
+    ],
+    correctOption: 2, // 两者都有是第3个选项
+    answer: "两者都有"
+},
+
+// 题目3（无配图问答题）
+{
+    question: "《我的青春恋爱物语果然有问题》中，阳乃对大老师的定性是（）的怪物。",
+    hint: "并非理性",
+    answer: "自我意识"
+},
+
+// 题目4（无配图问答题）
+{
+    question: "《我的青春恋爱物语果然有问题》中，雪乃在游乐园滑车上对大老师说出的请求是？",
+    hint: "想磕八雪糖了",
+    answer: "总有一天，要来救我呀"
+},
+
+// 题目5（无配图选择题）
+{
+    question: "《我的青春恋爱物语果然有问题》中，给大老师发卡最多的女人是？",
+    options: [
+        { text: "雪之下雪乃" },
+        { text: "由比滨结衣" },
+        { text: "一色彩羽" },
+        { text: "雪之下阳乃" }
+    ],
+    correctOption: 2, // 一色彩羽是第3个选项
+    answer: "一色彩羽"
+},
+
+// 题目6（无配图选择题）
+{
+    question: "《我的青春恋爱物语果然有问题》中，材木座让侍奉部看他的小说，最终谁没看？",
+    options: [
+        { text: "比企谷八幡" },
+        { text: "雪之下雪乃" },
+        { text: "由比滨结衣" },
+        { text: "三个人全干了" }
+    ],
+    correctOption: 2, // 由比滨结衣是第3个选项
+    answer: "由比滨结衣"
+}
+                ]
+            },
+
+                hyouka: {
+                title: "冰菓",
+                description: "我很好奇",
+                questions: [
+// 题目1（无配图选择题）
+{
+    question: "《冰菓》中谁激励了折棒，并成功驱动他去推理未完成电影的剧情？",
+    options: [
+        { text: "千反田爱瑠" },
+        { text: "服部里志" },
+        { text: "入须冬实" },
+        { text: "折木供惠" }
+    ],
+    correctOption: 2, // 入须冬实是第3个选项
+    answer: "入须冬实"
+},
+
+// 题目2（无配图问答题）
+{
+    question: "《冰菓》的杂志名字'冰菓'的真实含义是什么？",
+    hint: "一种谐音梗）",
+    answer: "我呐喊"
+},
+
+// 题目3（无配图选择题）
+{
+    question: "《冰菓》中'关于你所放弃的经营性的战略眼光，我来替你掌握如何？'由谁说出口？",
+    options: [
+        { text: "折木奉太郎" },
+        { text: "服部里志" },
+        { text: "远垣内将司" },
+        { text: "没有人说过" }
+    ],
+    correctOption: 3, // 没有人说过是第4个选项
+    answer: "没有人说过（折棒并没有说出口）"
+},
+
+// 题目4（无配图问答题）
+{
+    question: "《冰菓》结尾处，女主对男主'开始冷起来了呢'的回复是？",
+    hint: "不知道给什么提示了，卖个萌吧",
+    answer: "不，已经入春了"
+},
+
+// 题目5（无配图选择题）
+{
+    question: "'天才对自身才能的不自觉是对凡人最大的伤害。'下列人物组合与这种说法最无关的是？",
+    options: [
+        { text: "千反田和摩耶花" },
+        { text: "折棒和里志" },
+        { text: "陆山和田名边" },
+        { text: "安城和河内" }
+    ],
+    correctOption: 0, // 千反田和摩耶花是第1个选项
+    answer: "千反田和摩耶花"
+},
+
+// 题目6（无配图问答题）
+{
+    question: "《冰菓》中小木老师为什么说自己喜欢直升机？",
+    hint: "man!",
+    answer: "他实际关注的是天气放晴后，直升机可以顺利起飞，以便去救援困在山里的遇险者。（意思差不多即可）"
+},
+
+// 题目7（题干配图问答题）
+{
+    question: "《冰菓》第一集，面对千反田伸出的手，折木给出的是……",
+    image: "images/hyouka-7-0.webp", // 题干配图
+    hint: "折木握住了千反田的手，皆大欢喜皆大欢喜（大雾）",
+    answer: "古典部入部申请"
+},
+
+// 题目8（无配图选择题）
+{
+    question: "《冰菓》动画剧情最初期，折棒对他人'大量消耗能量的生活方式'的态度是？",
+    options: [
+        { text: "瞧不起" },
+        { text: "暗自向往" },
+        { text: "乐在其中" },
+        { text: "敬而远之" }
+    ],
+    correctOption: 3, // 敬而远之是第4个选项
+    answer: "敬而远之"
+},
+
+// 题目9（无配图问答题）
+{
+    question: "《冰菓》千反田听到关谷纯的解答后为何哭泣？",
+    hint: "回答直接原因哦，想想能让小女孩哭出来是什么原因(•̀⌄•́)动漫中有原话",
+    answer: "害怕活得如行尸走肉"
+},
+
+// 题目10（无配图问答题）
+{
+    question: "《冰菓》关谷纯在学生运动中的真实身份是什么？",
+    hint: "送分题ψ(｀∇´)ψ",
+    answer: "抽签选中的傀儡领袖，替罪羊（意思差不多即可）"
+},
+
+// 题目11（无配图选择题）
+{
+    question: "《冰菓》偶人队伍提出绕行远路桥的方案，但是由于该方案潜在的问题，众人犹豫不决。此时是谁提出了应对潜在问题的具体策略？",
+    options: [
+        { text: "折木奉太郎" },
+        { text: "千反田爱瑠" },
+        { text: "服部里志" },
+        { text: "伊原摩耶花" }
+    ],
+    correctOption: 1, // 千反田爱瑠是第2个选项
+    answer: "千反田爱瑠"
+},
+
+// 题目12（无配图问答题）
+{
+    question: "《冰菓》折木节能主义的具体表述是什么？",
+    hint: "两句话，都是什么样的事情怎么做？",
+    answer: "没必要的事不做，必要的事尽快解决。"
+}
+                ]
+            },
+
+                madoka: {
+                title: "魔法少女小圆",
+                description: "和我签订契约，成为魔法少女吧",
+                questions: [
+// 题目1（无配图问答题）
+{
+    question: "比希望更炽热，比绝望更深邃的是什么？",
+    hint: "经典台词",
+    answer: "是爱啊！"
+},
+
+// 题目2（题干配图问答题）
+{
+    question: "《魔法少女小圆》中，美树沙耶香魔女化的真正原因是什么？",
+    image: "images/madoka-2-0.webp", // 题干配图
+    hint: "不只是'被绿了'这么简单吧……",
+    answer: "'正义的伙伴'沙耶香始终以不求回报的圣母形象要求自己，在意识到自己的私心与欲望，并得知魔法少女的真相后，陷入了绝望。\n参考第九集：\n'祈求某人幸福的话，却不得不去等量地诅咒其他人，我们魔法少女就是这种结构吧。'——沙耶香\n"
+},
+
+// 题目3（题干配图问答题）
+{
+    question: "TV动画《魔法少女小圆》第9集中，佐仓杏子'经历了这样的人生，至少让我做一次幸福的梦吧'，'幸福的梦'指的是什么？",
+    image: "images/madoka-3-0.webp", // 题干配图
+    hint: "主线剧情中，她是在做什么事情的时候牺牲的？",
+    answer: "参考答案：魔女化是能够被逆转的。\n其实杏子本质上也是'正义的伙伴'哦，不想最终去诅咒他人～"
+},
+
+// 题目4（无配图问答题）
+{
+    question: "晓美焰的能力是？",
+    answer: "控制时间/时间倒流"
+},
+
+// 题目5（无配图问答题）
+{
+    question: "《魔法少女小圆》中，跟什么签订契约可以成为魔法少女？",
+    answer: "丘比/キュゥべえ ( ◕‿‿ ◕)"
+}
+                ]
+            },
+
+                kimetsu: {
+                title: "鬼灭之刃",
+                description: "心を燃やせ！",
+                questions: [
+// 题目1（无配图问答题）
+{
+    question: "炭治郎的哪位亲人变成了鬼？",
+    hint: "女生",
+    answer: "妹妹"
+},
+
+// 题目2（无配图问答题）
+{
+    question: "主角团中会使用雷之呼吸的是哪位？（请回答全名）",
+    hint: "四个字",
+    answer: "我妻善逸"
+},
+
+// 题目3（无配图问答题）
+{
+    question: "剧中使用二刀流的角色用的是什么呼吸法？",
+    hint: "动物",
+    answer: "兽之呼吸"
+},
+
+// 题目4（无配图选择题）
+{
+    question: "以下哪位角色的饭量最小？",
+    options: [
+        { text: "炭治郎" },
+        { text: "炎柱" },
+        { text: "蝶柱" },
+        { text: "恋柱" }
+    ],
+    correctOption: 2, // 蝶柱是第3个选项
+    answer: "蝶柱"
+},
+
+// 题目5（无配图选择题）
+{
+    question: "漫画中最后的鬼王是谁？",
+    options: [
+        { text: "炭治郎" },
+        { text: "上弦三" },
+        { text: "无惨" },
+        { text: "黑死牟" }
+    ],
+    correctOption: 0, // 炭治郎是第1个选项
+    answer: "炭治郎"
+}
+                ]
+            },
+
+                jujutsu: {
+                title: "咒术回战",
+                description: "天上天下，唯我独尊",
+                questions: [
+// 题目1（无配图问答题）
+{
+    question: "虎杖悠仁的核心技能是什么？",
+    hint: "一直用",
+    answer: "径庭拳/黑闪"
+},
+
+// 题目2（无配图问答题）
+{
+    question: "东堂葵的技能是什么？",
+    hint: "鼓掌",
+    answer: "不义游戏"
+},
+
+// 题目3（无配图问答题）
+{
+    question: "涩谷事变中，宿傩把哪位特级咒灵杀了？",
+    hint: "火系的",
+    answer: "漏壶"
+},
+
+// 题目4（无配图选择题）
+{
+    question: "动画中谁不会领域展开？",
+    options: [
+        { text: "五条悟" },
+        { text: "七海建人" },
+        { text: "伏黑惠" },
+        { text: "真人" }
+    ],
+    correctOption: 1, // 七海建人是第2个选项
+    answer: "七海建人"
+},
+
+// 题目5（无配图选择题）
+{
+    question: "五条悟的挚友是谁？",
+    hint: "技能类似宝可梦",
+    answer: "夏油杰"
+}
+                ]
+            },
+
+                lucky: {
+                title: "幸运星",
+                description: "一言以蔽之，就是“爱”",
+                questions: [
+// 题目1（无配图选择题）
+{
+    question: "《幸运星》的标题里，☆出现在第几个假名后？",
+    options: [
+        { text: "1" },
+        { text: "2" },
+        { text: "3" },
+        { text: "4" }
+    ],
+    correctOption: 1, // 第2个假名后是第2个选项
+    answer: "第2个假名后（らき☆すた）"
+},
+
+// 题目2（无配图问答题）
+{
+    question: "《幸运星》中，主角泉此方的母亲名字是什么？",
+    hint: "此方→",
+    answer: "泉彼方"
+},
+
+// 题目3（无配图问答题）
+{
+    question: "《幸运星》中，柊家姐妹分别叫什么？",
+    answer: "姐姐柊镜，妹妹柊司"
+},
+
+// 题目4（无配图问答题）
+{
+    question: "《幸运星》的大火的op叫什么？",
+    hint: "拿去吧！_______",
+    answer: "拿去吧！水手服"
+},
+
+// 题目5（无配图问答题）
+{
+    question: "《幸运星》中泉此方在打工时cos的是哪个角色？",
+    hint: "声优相同",
+    answer: "凉宫春日（团长）"
+},
+
+// 题目6（无配图问答题）
+{
+    question: "《幸运星》每集片尾的lucky channel的主持人是哪两位？",
+    answer: "小神晶和白石"
+},
+
+// 题目7（无配图问答题）
+{
+    question: "《幸运星》的前四集被哪位战犯做脱线了，后面又是哪位神来救的场？",
+    hint: "甲级战犯",
+    answer: "山本宽；武本康弘"
+},
+
+// 题目8（无配图问答题）
+{
+    question: "《幸运星》的催泪神回第22集《此处的彼方》中，此方问爸爸为什么妈妈会选择他，爸爸的回答是：",
+    hint: "有唯一一个绝对的自信：就是我____________",
+    answer: "有唯一一个绝对的自信，就是我比这个世界上的任何人都更爱着彼方"
+},
+
+// 题目9（无配图选择题）
+{
+    question: "《幸运星》中此方提出了知名的ACG物品买三份原理，以下哪个作用不属于三者之一？",
+    options: [
+        { text: "收藏用" },
+        { text: "传教用" },
+        { text: "出租用" },
+        { text: "鉴赏用" }
+    ],
+    correctOption: 2, // 出租用是第3个选项
+    answer: "出租用"
+},
+
+// 题目10（无配图问答题）
+{
+    question: "《幸运星》中此方发扬光大了一句名台词：____是稀有价值",
+    answer: "贫乳是稀有价值"
+}
+                ]
+            },
+
+                frieren: {
+                title: "葬送的芙莉莲",
+                description: "魔法是想象的世界",
+                questions: [
+// 题目1（无配图问答题）
+{
+    question: "辛美尔带领的小队有哪四个成员？",
+    hint: "战法牧",
+    answer: "勇者辛美尔、魔法师芙莉莲、僧侣海塔、战士艾泽"
+},
+
+// 题目2（无配图问答题）
+{
+    question: "芙莉莲带领的小队有哪四个成员？",
+    hint: "战法牧",
+    answer: "魔法师芙莉莲、魔法师菲伦、战士修塔尔克、僧侣赞因"
+},
+
+// 题目3（无配图问答题）
+{
+    question: "'葬送'在日语中与某个中国古代名人发音相同，这个人是谁？",
+    hint: "三国时期的名人",
+    answer: "曹操（そうそう）"
+},
+
+// 题目4（题干配图问答题）
+{
+    question: "所谓男人嘛，送他们这种东西就会很开心。芙莉莲手中的是什么东西？",
+    image: "images/frieren-4-0.webp", // 题干配图
+    hint: "只会溶解……",
+    answer: "只会溶解衣服的药水"
+},
+
+// 题目5（题干和选项配图）
+{
+    question: "赞因痛斥'赶快给我交往啊'，指的是哪两个人？",
+    image: "images/frieren-5-0.webp", // 题干配图
+    options: [
+        { text: "芙莉莲与辛美尔", image: "images/frieren-5-1.webp" },
+        { text: "菲伦与修塔尔克", image: "images/frieren-5-2.webp" },
+        { text: "尤贝尔与兰托", image: "images/frieren-5-3.webp" },
+        { text: "拉比涅与康涅", image: "images/frieren-5-4.webp" }
+    ],
+    correctOption: 1, // 菲伦与修塔尔克是第2个选项
+    answer: "菲伦与修塔尔克"
+},
+
+// 题目6（题干配图问答题）
+{
+    question: "芙莉莲被宝箱怪吞下时喊了什么话？",
+    image: "images/frieren-6-0.webp", // 题干配图
+    hint: "芙莉莲是什么心情？",
+    answer: "好黑啊，好可怕啊！"
+},
+
+// 题目7（题干配图选择题）
+{
+    question: "芙莉莲最喜欢的是什么魔法？",
+    image: "images/frieren-7-0.webp", // 题干配图
+    options: [
+        { text: "一般攻击魔法" },
+        { text: "能无视衣物的魔法" },
+        { text: "能变出花田的魔法" },
+        { text: "让勇者复活的魔法" }
+    ],
+    correctOption: 2, // 能变出花田的魔法是第3个选项
+    answer: "能变出花田的魔法"
+},
+
+// 题目8（题干配图选择题）
+{
+    question: "以下哪个不是尤贝尔的能力之一？",
+    image: "images/frieren-8-0.webp", // 题干配图
+    options: [
+        { text: "大概什么都能切的魔法" },
+        { text: "目光拘束魔法" },
+        { text: "使用共鸣者魔法的魔法" },
+        { text: "能无视衣物的魔法" }
+    ],
+    correctOption: 3, // 能无视衣物的魔法是第4个选项
+    answer: "能无视衣物的魔法（这是菲伦的能力）"
+}
+                ]
+            },
+
+                mygo: {
+                title: "MyGO / Ave Mujica",
+                description: "我的歌，是我内心的呐喊！",
+                questions: [
+// 题目1（无配图选择题）
+{
+    question: "千早爱音最晚遇到的MyGO成员是谁？",
+    options: [
+        { text: "高松灯" },
+        { text: "长崎素世" },
+        { text: "椎名立希" },
+        { text: "要乐奈" }
+    ],
+    correctOption: 3, // 要乐奈是第4个选项
+    answer: "要乐奈（学校遇到灯，灯逃跑路上遇到立希和素世，在咖啡厅遇到乐奈）"
+},
+
+// 题目2（无配图选择题）
+{
+    question: "在动画《BanG Dream! It's MyGO!!!!!》中，MyGO第一次Live前的准备室里，桌子上没有放以下哪种食物？",
+    options: [
+        { text: "巧克力螺" },
+        { text: "米歇尔馒头" },
+        { text: "三色团子" },
+        { text: "甜甜圈" }
+    ],
+    correctOption: 0, // 巧克力螺是第1个选项
+    answer: "巧克力螺"
+},
+
+// 题目3（题干配图问答题）
+{
+    question: "《BanG Dream! It's MyGO!!!!!》中，长期素食女士是收到什么后对睦头人说出了'这个，不需要了'？",
+    image: "images/mygo-3-0.webp", // 题干配图
+    hint: "可能是蔬菜",
+    answer: "小黄瓜"
+},
+
+// 题目4（无配图问答题）
+{
+    question: "丰川集团的字母简称是___集团",
+    image: "images/mygo-4-0.webp", // 题干配图
+    hint: "三个字母，想想'丰川'怎么读",
+    answer: "TGW"
+},
+
+// 题目5（题干配图问答题）
+{
+    question: "如图为《MyGO》某个名场面的二创，在这个场面中，原作从左到右的三个角色分别是谁？",
+    image: "images/mygo-5-0.webp", // 题干配图
+    hint: "你这个人满脑子都只有自己呢",
+    answer: "丰川祥子、长崎素世、若叶睦"
+},
+
+// 题目6（无配图选择题）
+{
+    question: "以下哪一首歌没有在《MyGO》动画正片的live中演出过？",
+    options: [
+        { text: "碧天伴走" },
+        { text: "壱雫空" },
+        { text: "春日影" },
+        { text: "诗超绊" }
+    ],
+    correctOption: 1, // 壱雫空是第2个选项
+    answer: "壱雫空（出现在OP）"
+},
+
+// 题目7（题干配图选择题）
+{
+    question: "三角初华在如图所示的名场面中，喊了几次'saki酱'？",
+    image: "images/mygo-7-0.webp", // 题干配图
+    options: [
+        { text: "3次" },
+        { text: "5次" },
+        { text: "7次" },
+        { text: "9次" }
+    ],
+    correctOption: 2, // 7次是第3个选项
+    answer: "7次"
+},
+
+// 题目8（无配图问答题）
+{
+    question: "两个乐队的主唱三角初华和高松灯在什么地方首次相遇？",
+    image: "images/mygo-8-0.webp", // 题干配图
+    hint: "想想两个人有什么除了丰川祥子之外的共同爱好",
+    answer: "天文馆"
+},
+
+// 题目9（题干配图选择题）
+{
+    question: "戴着难绷的假面的这位CV配音的是哪一个角色？",
+    image: "images/mygo-9-0.webp", // 题干配图
+    options: [
+        { text: "若叶睦" },
+        { text: "高松灯" },
+        { text: "丰川祥子" },
+        { text: "千早爱音" }
+    ],
+    correctOption: 2, // 丰川祥子是第3个选项
+    answer: "丰川祥子"
+},
+
+// 题目10（无配图选择题）
+{
+    question: "《Ave Mujica》中，若叶睦/墨提斯在现实中从楼梯上摔下来了多少次？",
+    options: [
+        { text: "0次" },
+        { text: "1次" },
+        { text: "2次" },
+        { text: "3次" }
+    ],
+    correctOption: 1, // 1次是第2个选项
+    answer: "1次（左右脑互搏从RiNG的楼梯摔下来。初华想象中摔过一次，睦莫在心里推下楼过一次）"
+}
+                ]
+            },
+
+                others: {
+                title: "动漫综合",
+                description: "出不够5道题的都扔这里了，但并非全是小众作品",
+                questions: [
+// 题目1（无配图问答题）
+{
+    question: "动漫界'校园四霸'指的是哪些角色？说出一位即可",
+    hint: "《冰菓》《青春猪头少年不会梦到兔女郎学姐》《我的青春恋爱物语一定有问题》《欢迎来到实力至上主义的教室》",
+    answer: "折木奉太郎、梓川咲太、比企谷八幡、绫小路清隆"
+},
+
+// 题目2（无配图问答题）
+{
+    question: "'节能主义'说的是校园四霸中的哪位人物？",
+    hint: "微信头像泛滥",
+    answer: "折木奉太郎"
+},
+
+// 题目3（无配图问答题）
+{
+    question: "《Charlotte》中，乙坂有宇的特殊能力是什么？（两个字）",
+    hint: "剧中最强能力",
+    answer: "掠夺"
+},
+
+// 题目4（无配图选择题）
+{
+    question: "以下四位动漫人物谁更孤独？",
+    options: [
+        { text: "后藤独" },
+        { text: "黑木智子" },
+        { text: "雪之下雪乃" },
+        { text: "堀北铃音" }
+    ],
+    correctOption: 1, // 黑木智子是第2个选项
+    answer: "黑木智子（丧女。波奇有乐队，雪乃和铃音是现充）"
+},
+
+// 题目5（无配图问答题）
+{
+    question: "《不时以俄语遮羞的邻座艾莉同学》中，久世政近实际的青梅竹马是谁？",
+    hint: "俄语启蒙",
+    answer: "玛利亚·米哈伊罗夫纳·九条（艾莉的姐姐）"
+},
+
+// 题目6（无配图问答题）
+{
+    question: "智慧的颜色是什么？",
+    hint: "《为美好的世界献上祝福》阿库娅",
+    answer: "蓝色"
+},
+
+// 题目7（无配图问答题）
+{
+    question: "《刀剑神域》剧场版中，亚丝娜和优纪的合击大招叫什么？",
+    hint: "跟桐人没关系",
+    answer: "圣母圣咏"
+},
+
+// 题目8（无配图选择题）
+{
+    question: "《某科学的超电磁炮》中，御坂美琴即将晋升Level 6时被谁打断了？",
+    options: [
+        { text: "一方通行" },
+        { text: "削板军霸" },
+        { text: "上条当麻" },
+        { text: "冥土追魂" }
+    ],
+    correctOption: 2, // 上条当麻是第3个选项
+    answer: "上条当麻"
+},
+
+// 题目9（无配图选择题）
+{
+    question: "《辉夜大小姐想让我告白》中，白银御行要去哪所大学留学？",
+    options: [
+        { text: "清华大学" },
+        { text: "斯坦福大学" },
+        { text: "麻省理工" },
+        { text: "东京大学" }
+    ],
+    correctOption: 1, // 斯坦福是第2个选项
+    answer: "斯坦福大学"
+},
+
+// 题目10（无配图选择题）
+{
+    question: "以下哪部动画迟迟没有续作？",
+    options: [
+        { text: "游戏人生" },
+        { text: "碧蓝之海" },
+        { text: "魔法禁书目录" },
+        { text: "约会大作战" }
+    ],
+    correctOption: 0, // 游戏人生是第1个选项
+    answer: "游戏人生（No Game No Life）"
+},
+
+// 题目11（题干配图选择题）
+{
+    question: "《约会大作战》中能玩弄时间的女人时崎狂三，其宝具“刻刻帝”拥有多少种不同的子弹？",
+    image: "images/others-11-0.webp", // 题干配图
+    options: [
+        { text: "6" },
+        { text: "12" },
+        { text: "18" },
+        { text: "24" }
+    ],
+    correctOption: 1, // 12是第2个选项
+    answer: "12（即便没看过约战，如果注意到钟面上的大刻度有12个，仍然可以猜出答案。）"
+},
+
+// 题目12（无配图选择题）
+{
+    question: "下列哪个长篇动画系列拥有最悠久的历史（动画初上映时间最早）？",
+    options: [
+        { text: "哆啦A梦" },
+        { text: "聪明的一休" },
+        { text: "猫和老鼠" },
+        { text: "米老鼠和朋友们" }
+    ],
+    correctOption: 3, // 米老鼠和朋友们是第4个选项
+    answer: "米老鼠和朋友们（四个选项对应的时间分别是1973年4月1日，1975年10月15日，1940年2月10日《甜蜜的家》，1928年11月18日《汽船威利》）"
+},
+
+// 题目13（题干和选项配图选择题）
+{
+    question: "以下哪部作品不是由京阿尼制作的？",
+    image: "images/others-13-0.webp", // 题干配图
+    options: [
+        { text: "小城日常", image: "images/others-13-1.webp" },
+        { text: "紫罗兰的永恒花园", image: "images/others-13-2.webp" },
+        { text: "群花绽放，彷如修罗", image: "images/others-13-3.webp" },
+        { text: "小林家的龙女仆", image: "images/others-13-4.webp" }
+    ],
+    correctOption: 2, // 群花绽放，彷如修罗是第3个选项
+    answer: "群花绽放，彷如修罗（虽然原著作者是京吹的作者，但毕竟动画不是京阿尼做的hhh）"
+},
+
+// 题目14（无配图选择题）
+{
+    question: "《进击的巨人》中，“我铠他超”是对谁说出的？",
+    options: [
+        { text: "艾伦" },
+        { text: "三笠" },
+        { text: "阿尔敏" },
+        { text: "莱纳" }
+    ],
+    correctOption: 0,
+    answer: "艾伦"
+},
+
+// 题目15（题干配图选择题）
+{
+    question: "“FFF团”来源于哪部作品？",
+    image: "images/others-15-0.webp", // 题干配图
+    options: [
+        { text: "去吧！稻中乒团" },
+        { text: "只有神知道的世界" },
+        { text: "约会大作战" },
+        { text: "笨蛋、测验、召唤兽" }
+    ],
+    correctOption: 3, // 笨蛋、测验、召唤兽是第4个选项
+    answer: "笨蛋、测验、召唤兽"
+},
+
+// 题目16（无配图问答题）
+{
+    question: "列举P.A.WORKS公司制作的、你印象最深的三部动画作品",
+    answer: "真实之泪、Angel Beats!、花开伊吕波、来自风平浪静的明天、白箱、Charlotte、樱花任务、赛马娘 Pretty Derby、来自多彩世界的明天、成神之日、白沙的水族馆、派对浪客诸葛孔明、世界计划 缤纷舞台！、岁月流逝饭菜依旧美味、朝花夕誓、Dive in Wonderland"
+},
+
+// 题目17（题干配图选择题）
+{
+    question: "梶浦由记没有参与下面哪部动画的配乐工作？",
+    image: "images/others-17-0.webp", // 题干配图
+    options: [
+        { text: "新世纪福音战士" },
+        { text: "魔法少女小圆" },
+        { text: "Fate / Zero" },
+        { text: "刀剑神域" }
+    ],
+    correctOption: 0, // 新世纪福音战士是第1个选项
+    answer: "新世纪福音战士（其配乐师为鹭巢诗郎。EVA 1995年开播，而梶浦阿姨最早在1995年开始给动画配乐，新人不可能上来就给这么大的作品配乐的。不要和机动战士Gundam SEED系列记混了哦～）"
+},
+
+// 题目18（题干和选项配图选择题）
+{
+    question: "以下哪个角色到目前为止仍然是人类？",
+    options: [
+        { text: "源樱《佐贺偶像是传奇》", image: "images/others-18-1.webp" },
+        { text: "索菲《邻家索菲》", image: "images/others-18-2.webp" },
+        { text: "迪奥《JOJO的奇妙冒险》", image: "images/others-18-3.webp" },
+        { text: "丰川祥子《Ave Mujica》", image: "images/others-18-4.webp" }
+    ],
+    correctOption: 3, // 丰川祥子是第4个选项
+    answer: "丰川祥子（你就说对不对吧）"
+},
+
+// 题目19（题干配图选择题）
+{
+    question: "《罗小黑战记》中，师姐鹿野的随身金属是从哪里来的？",
+    image: "images/others-19-0.webp", // 题干配图
+    options: [
+        { text: "无限送的" },
+        { text: "路上捡的" },
+        { text: "做任务时得到的" },
+        { text: "剧情没说" }
+    ],
+    correctOption: 0, // 无限送的是第1个选项
+    answer: "无限送的"
+},
+
+// 题目20（无配图选择题）
+{
+    question: "《罗小黑战记》中，小白捡到小黑时的箱子上写着什么？",
+    options: [
+        { text: "找富婆" },
+        { text: "救救孩子" },
+        { text: "求收留" },
+        { text: "求包养" }
+    ],
+    correctOption: 3, // 求包养是第4个选项
+    answer: "求包养"
+},
+
+// 题目21（题干配图选择题）
+{
+    question: "《地缚少年花子君》中，男女主角第一次相遇的地点是哪里？",
+    image: "images/others-21-0.webp", // 题干配图
+    options: [
+        { text: "天台" },
+        { text: "厕所" },
+        { text: "食堂" },
+        { text: "教室" }
+    ],
+    correctOption: 1, // 厕所是第2个选项
+    answer: "厕所（请再读一遍番名）"
+},
+
+// 题目22（无配图选择题）
+{
+    question: "《虫师》的男主角银古的眼睛是什么颜色的？",
+    options: [
+        { text: "绿色" },
+        { text: "灰色" },
+        { text: "蓝色" },
+        { text: "银色" }
+    ],
+    correctOption: 0, // 绿色是第1个选项
+    answer: "绿色"
+},
+
+// 题目23（无配图选择题）
+{
+    question: "超和平busters出自哪部番？",
+    options: [
+        { text: "《天使的心跳!》" },
+        { text: "《Charlotte》" },
+        { text: "《我们仍未知道那天所看见的花的名字》" },
+        { text: "《Little Busters!》" }
+    ],
+    correctOption: 2, // 未闻花名是第3个选项
+    answer: "《我们仍未知道那天所看见的花的名字》"
+},
+
+// 题目24（无配图选择题）
+{
+    question: "下列哪部番与演奏乐器几乎无关？",
+    options: [
+        { text: "《吹响吧！上低音号》" },
+        { text: "《樱花庄的宠物女孩》" },
+        { text: "《四月是你的谎言》" },
+        { text: "《春&夏推理事件簿》" }
+    ],
+    correctOption: 1, // 樱花庄是第2个选项
+    answer: "《樱花庄的宠物女孩》"
+},
+
+// 题目25（题干配图问答题）
+{
+    question: "配图是哪部动漫的名场面？",
+    image: "images/others-25-0.webp", // 题干配图
+    hint: "嗷~！",
+    answer: "《男子高中生的日常》"
+},
+
+// 题目26（无配图问答题）
+{
+    question: "《男子高中生的日常》：今日的风儿，（）",
+    hint: "又一个名场面",
+    answer: "甚是喧嚣"
+},
+
+// 题目27（无配图选择题）
+{
+    question: "《路人女主的养成方法》中，英梨梨在临行前拿走了男主的什么？",
+    options: [
+        { text: "初吻" },
+        { text: "眼镜" },
+        { text: "纽扣" },
+        { text: "马桶盖" }
+    ],
+    correctOption: 1, // 眼镜是第2个选项
+    answer: "眼镜"
+},
+
+// 题目28（无配图选择题）
+{
+    question: "下列哪部番的第一男主在已知剧情中只喜欢过一个妹子？",
+    options: [
+        { text: "虚构推理" },
+        { text: "恋爱随意链接" },
+        { text: "龙与虎" },
+        { text: "月色真美" }
+    ],
+    correctOption: 3, // 月色真美是第4个选项
+    answer: "月色真美"
+},
+
+// 题目29（无配图问答题）
+{
+    question: "B站小电视的表情出自哪部番？",
+    hint: "（=ω=）",
+    answer: "幸运星"
+},
+
+// 题目30（无配图选择题）
+{
+    question: "'不愉快desu'是哪部动漫的女主角口癖？",
+    options: [
+        { text: "幸运星" },
+        { text: "境界的彼方" },
+        { text: "没有黄段子的无聊世界" },
+        { text: "凉宫春日的忧郁" }
+    ],
+    correctOption: 1, // 境界的彼方是第2个选项
+    answer: "境界的彼方"
+},
+
+// 题目31（无配图问答题）
+{
+    question: "《比宇宙更远的地方》标题指的是什么地方？",
+    hint: "某个很远的地方（废话",
+    answer: "南极"
+},
+
+// 题目32（无配图选择题）
+{
+    question: "'永无止境的八月'出自哪部番？",
+    options: [
+        { text: "夏日重现" },
+        { text: "凉宫春日的忧郁" },
+        { text: "刻刻" },
+        { text: "命运石之门" }
+    ],
+    correctOption: 1, // 凉宫春日的忧郁是第2个选项
+    answer: "凉宫春日的忧郁"
+},
+
+// 题目33（题干配图问答题）
+{
+    question: "配图是什么动漫的经典镜头？",
+    image: "images/others-33-0.webp", // 题干配图
+    hint: "新房昭之",
+    answer: "《物语系列》（或答出系列中任意一作）"
+},
+
+// 题目34（无配图选择题）
+{
+    question: "《恋爱循环》是谁的角色曲？",
+    options: [
+        { text: "阿良良木月火" },
+        { text: "贝木泥舟" },
+        { text: "千石抚子" },
+        { text: "战场原黑仪" }
+    ],
+    correctOption: 2, // 千石抚子是第3个选项
+    answer: "千石抚子"
+},
+
+// 题目35（无配图选择题）
+{
+    question: "《物语系列》中'我只知道我知道的事'是谁的台词？",
+    options: [
+        { text: "战场原黑仪" },
+        { text: "羽川翼" },
+        { text: "忍野忍" },
+        { text: "卧烟伊豆湖" }
+    ],
+    correctOption: 1, // 羽川翼是第2个选项
+    answer: "羽川翼"
+},
+
+// 题目36（无配图选择题）
+{
+    question: "下列不属于《化物语》中出现的怪异是？",
+    options: [
+        { text: "蟹" },
+        { text: "猿猴" },
+        { text: "白虎" },
+        { text: "蜗牛" }
+    ],
+    correctOption: 2, // 白虎是第3个选项
+    answer: "白虎"
+},
+
+// 题目37（无配图问答题）
+{
+    question: "《囮物语》中专家给阿良良木的符咒被阿良良木藏在哪里？",
+    hint: "想想一切故事的开端（）",
+    answer: "小黄书里"
+},
+
+// 题目38（无配图选择题）
+{
+    question: "《战栗杀机》的英文名是？",
+    options: [
+        { text: "apple fish" },
+        { text: "watermelon fish" },
+        { text: "banana fish" },
+        { text: "cucumber fish" }
+    ],
+    correctOption: 2, // banana fish是第3个选项
+    answer: "banana fish"
+},
+
+// 题目39（题干配图选择题）
+{
+    question: "在《银河特急 银河铁道999》中出场的这位角色名字叫？",
+    image: "images/others-39-0.webp", // 题干配图
+    options: [
+        { text: "一子" },
+        { text: "两子" },
+        { text: "三子" },
+        { text: "四子" }
+    ],
+    correctOption: 1, // 两子是第2个选项
+    answer: "两子"
+},
+
+// 题目40（无配图问答题）
+{
+    question: "何意味是什么意思？",
+    hint: "什么意思",
+    answer: "什么意思"
+},
+
+// 题目41（无配图问答题）
+{
+    question: "希腊奶是什么意思？",
+    hint: "不知道",
+    answer: "不知道"
+},
+
+// 题目42（题干配图问答题）
+{
+    question: "《某科学的超电磁炮》中，白井黑子给御坂美琴买的东西送货上门时，快递员说寄来的物品是什么？",
+    image: "images/others-42-0.webp", // 题干配图
+    answer: "电脑配件"
+},
+
+// 题目43（无配图问答题）
+{
+    question: "'哔哩哔哩'的名称出处是哪个动漫？",
+    hint: "放电妹",
+    answer: "《某科学的超电磁炮》。御坂美琴拥有操控电流的超能力，释放电流时会发出'ビリビリ'（bilibili）的拟声词，上条当麻因此戏称她为'bilibili放电妹'"
+},
+
+// 题目44（题干配图问答题）
+{
+    question: "B站老板陈睿的头像是哪部番的什么角色？",
+    image: "images/others-44-0.webp", // 题干配图
+    hint: "俺妹",
+    answer: "《我的妹妹哪有这么可爱！》的高坂桐乃"
+},
+
+// 题目45（题干配图问答题）
+{
+    question: "图中三个粉毛大雷吉他手的水平排序是怎样的？",
+    image: "images/others-45-0.webp", // 题干配图
+    hint: "出自《MyGO》《孤独摇滚》《LimeLight Lemonade Jam》",
+    answer: "波奇 >> 爱音 ≈ 惠凪"
+},
+
+// 题目46（题干配图问答题）
+{
+    question: "《Girls Band Cry / 少女乐队的呐喊》中，井芹仁菜对谁竖中指说谢谢？",
+    image: "images/others-46-0.webp", // 题干配图
+    hint: "乐队成员",
+    answer: "海老冢智和卢帕（ルパ）"
+},
+
+// 题目47（无配图选择题）
+{
+    question: "《轻音少女》中，平泽唯毕业那天早上为什么来得比较晚？",
+    options: [
+        { text: "在家改歌词" },
+        { text: "睡过头了" },
+        { text: "出门忘记带吉他" },
+        { text: "出门忘记穿校服" }
+    ],
+    correctOption: 0, // 在家改歌词是第1个选项
+    answer: "在家改歌词"
+},
+
+// 题目48（无配图选择题）
+{
+    question: "《迷宫饭》中恶魔诱惑年轻的米斯伦队长时使用的形象是？",
+    options: [
+        { text: "猪" },
+        { text: "羊" },
+        { text: "翼狮" },
+        { text: "牛" }
+    ],
+    correctOption: 1, // 羊是第2个选项
+    answer: "羊"
+},
+
+// 题目49（无配图选择题）
+{
+    question: "在《Angel Beats!》动画中，死后世界战线进行弹药武器补充的作战名称是？",
+    options: [
+        { text: "龙卷风作战" },
+        { text: "怪物流" },
+        { text: "Guild 空降作战" },
+        { text: "Demon Picnic" }
+    ],
+    correctOption: 2, // Guild 空降作战是第3个选项
+    answer: "Guild 空降作战"
+},
+
+// 题目50（无配图选择题）
+{
+    question: "《中二病也要谈恋爱》中小鸟游六花在班上男生投票的'可爱女生选拔赛'中获得第几名？",
+    options: [
+        { text: "第一名" },
+        { text: "第二名" },
+        { text: "第三名" },
+        { text: "第四名" }
+    ],
+    correctOption: 3, // 第四名是第4个选项
+    answer: "第四名"
+},
+
+// 题目51（无配图选择题）
+{
+    question: "《轻音少女》中平泽唯的吉他花了多少日元？",
+    options: [
+        { text: "10万日元" },
+        { text: "5万日元" },
+        { text: "25万日元" },
+        { text: "15万日元" }
+    ],
+    correctOption: 1, // 5万日元是第2个选项
+    answer: "5万日元"
+},
+
+// 题目52（无配图问答题）
+{
+    question: "《JOJO的奇妙冒险》中，瓦伦泰总统的替身'D4C'的全名及中文翻译是什么？",
+    hint: "豆浆~",
+    answer: "Dirty Deeds Done Dirt Cheap，极其容易实施的恶劣行径（恶行易施）"
+},
+
+// 题目53（无配图问答题）
+{
+    question: "小鸟游六花的中二台词是什么？",
+    hint: "爆ぜろリアル 弾けろシナプス バニッシュメント・ディス・ワールド！",
+    answer: "爆裂吧，现实！粉碎吧，精神！放逐这个世界！"
+},
+
+// 题目54（题干配图选择题）
+{
+    question: "动画制作中，'白箱'通常指什么？",
+    image: "images/others-54-0.webp", // 题干配图
+    options: [
+        { text: "盛放原画的盒子" },
+        { text: "盛放分镜稿的盒子" },
+        { text: "盛放用于试播的录像带的盒子" },
+        { text: "盛放交付给电视台的录像带的盒子" }
+    ],
+    correctOption: 2, // 第3个选项
+    answer: "盛放用于试播的录像带的盒子。'白箱'具体指的是在动画放送前，专门制作并赠送给参与动画制作的工作人员的录像带。这些录像带通常装在白色的盒子里，因此被称为'白箱'。"
+},
+
+// 题目55（题干配图问答题）
+{
+    question: "动画制作中，'制作进行'这一职位的主要工作是什么？",
+    image: "images/others-55-0.webp", // 题干配图
+    hint: "可以看图哦～",
+    answer: "协调，主要负责单集动画制作全流程的进度管理与资源调配。该岗位需统筹分镜会议组织、原画师招募、外包事务对接、跨部门协调等具体工作。因此《白箱》TV动画都在围绕着主角宫森葵（制作进行）展开。"
+},
+
+// 题目56（题干配图问答题）
+{
+    question: "《白箱》中所虚构的'武藏野动画'在现实中的原型是哪家动画公司？",
+    image: "images/others-56-0.webp", // 题干配图
+    hint: "你可能会知道：麻枝准的三部动画、工作中的女孩子系列、来自xxx的明天系列、25年4月的日常番xx饭……",
+    answer: "P.A.WORKS"
+},
+
+// 题目57（题干配图问答题）
+{
+    question: "《86：不存在的战区》中，女主角蕾娜的代号是什么？",
+    image: "images/others-57-0.webp", // 题干配图
+    hint: "好久不见，________",
+    answer: "管制一号/handler one"
+},
+
+// 题目58（题干配图选择题）
+{
+    question: "《无头骑士异闻录》中，无头骑士赛尔提幻化出的武器是什么？",
+    image: "images/others-58-0.webp", // 题干配图
+    options: [
+        { text: "武士刀" },
+        { text: "折叠刀" },
+        { text: "镰刀" },
+        { text: "圆珠笔" }
+    ],
+    correctOption: 2, // 镰刀是第3个选项
+    answer: "镰刀（武士刀是罪歌，折叠刀是折原临也的，圆珠笔是龙之峰帝人的）"
+},
+
+// 题目59（题干和选项配图选择题）
+{
+    question: "以下哪个角色不是声优羊宫妃那配音的？",
+    options: [
+        { text: "高松灯《MyGO》", image: "images/others-59-1.webp" },
+        { text: "山田杏奈《我心里危险的东西》", image: "images/others-59-2.webp" },
+        { text: "鹫见夕雪《我推的孩子》", image: "images/others-59-3.webp" },
+        { text: "乾心寿《更衣人偶坠入爱河》", image: "images/others-59-4.webp" }
+    ],
+    correctOption: 2, // 鹫见夕雪是第3个选项
+    answer: "鹫见夕雪（羊宫妃那配的是寿美奈美）"
+},
+
+// 题目60（题干配图问答题）
+{
+    question: "《败犬女主太多了》中，烧盐柠檬胸前的蝴蝶结是哪两种颜色的？",
+    image: "images/others-60-0.webp", // 题干配图
+    hint: "柠檬是什么颜色的呢？",
+    answer: "黄色、绿色"
+}
+                ]
+            },
+        };
+
+        // DOM元素
+        const selectionScreen = document.getElementById('selectionScreen');
+        const questionScreen = document.getElementById('questionScreen');
+        const topicsContainer = document.getElementById('topicsContainer');
+        const startBtn = document.getElementById('startBtn');
+        const backBtn = document.getElementById('backBtn');
+        const hintBtn = document.getElementById('hintBtn');
+        const answerBtn = document.getElementById('answerBtn');
+        const nextBtn = document.getElementById('nextBtn');
+        const correctBtn = document.getElementById('correctBtn');
+        const incorrectBtn = document.getElementById('incorrectBtn');
+        const resetScoreBtn = document.getElementById('resetScore');
+        const topicTitle = document.getElementById('topicTitle');
+        const questionText = document.getElementById('questionText');
+        const questionImage = document.getElementById('questionImage');
+        const optionsContainer = document.getElementById('optionsContainer');
+        const hintArea = document.getElementById('hintArea');
+        const hintText = document.getElementById('hintText');
+        const answerArea = document.getElementById('answerArea');
+        const answerText = document.getElementById('answerText');
+        const answerFeedback = document.getElementById('answerFeedback');
+        const correctCountEl = document.getElementById('correctCount');
+        const totalAnsweredEl = document.getElementById('totalAnswered');
+
+        // 状态变量
+        let currentTopic = '';
+        let currentQuestions = [];
+        let currentQuestionIndex = -1;
+        let totalCorrect = 0;
+        let totalAnswered = 0;
+        let isQuestionAnswered = false;
+
+        // 初始化
+        function init() {
+            // 从本地存储加载分数
+            loadScore();
+            
+            // 生成题库卡片
+            generateTopicCards();
+            
+            // 设置事件监听
+            setupEventListeners();
+        }
+
+        // 生成题库卡片
+        function generateTopicCards() {
+            topicsContainer.innerHTML = '';
+            
+            for (const [topicId, topicData] of Object.entries(questionBanks)) {
+                const card = document.createElement('div');
+                card.className = 'topic-card';
+                card.setAttribute('data-topic', topicId);
+                
+                card.innerHTML = `
+                  <div class="topic-title">
+                    ${topicData.title}
+                  </div>
+                  <div class="topic-count">
+                    ${topicData.questions.length}道题目
+                  </div>
+                  <div class="topic-description">
+                    ${topicData.description}
+                  </div>
+                  `;
+                
+                topicsContainer.appendChild(card);
+            }
+        }
+
+        // 从本地存储加载分数
+        function loadScore() {
+            const savedScore = localStorage.getItem('quizScore');
+            if (savedScore) {
+                const score = JSON.parse(savedScore);
+                totalCorrect = score.correct || 0;
+                totalAnswered = score.total || 0;
+                updateScoreDisplay();
+            }
+        }
+
+        // 设置事件监听
+        function setupEventListeners() {
+            // 题库选择
+            document.querySelectorAll('.topic-card').forEach(card => {
+                card.addEventListener('click', () => {
+                    document.querySelectorAll('.topic-card').forEach(c => c.classList.remove('selected'));
+                    card.classList.add('selected');
+                    currentTopic = card.getAttribute('data-topic');
+                });
+            });
+
+            // 开始挑战
+            startBtn.addEventListener('click', startGame);
+
+            // 返回选题
+            backBtn.addEventListener('click', () => {
+                questionScreen.style.display = 'none';
+                selectionScreen.style.display = 'flex';
+                hintArea.classList.remove('show');
+                answerArea.classList.remove('show');
+            });
+
+            // 显示提示
+            hintBtn.addEventListener('click', () => {
+                hintArea.classList.add('show');
+            });
+
+            // 显示答案
+            answerBtn.addEventListener('click', showAnswer);
+
+            // 下一题
+            nextBtn.addEventListener('click', showNextQuestion);
+
+            // 答对反馈
+            correctBtn.addEventListener('click', () => handleFeedback(true));
+
+            // 答错反馈
+            incorrectBtn.addEventListener('click', () => handleFeedback(false));
+
+            // 重置分数
+            resetScoreBtn.addEventListener('click', resetScore);
+        }
+
+        // 开始游戏
+        function startGame() {
+            if (!currentTopic) {
+                alert('请先选择题库！');
+                return;
+            }
+            
+            // 初始化游戏状态
+            currentQuestions = [...questionBanks[currentTopic].questions];
+            currentQuestionIndex = -1;
+            isQuestionAnswered = false;
+            
+            // 更新UI
+            topicTitle.textContent = questionBanks[currentTopic].title;
+            
+            // 切换到问题界面
+            selectionScreen.style.display = 'none';
+            questionScreen.style.display = 'flex';
+            
+            // 显示第一个问题
+            showNextQuestion();
+        }
+
+        // 显示下一题
+        function showNextQuestion() {
+            // 重置状态
+            isQuestionAnswered = false;
+            hintArea.classList.remove('show');
+            answerArea.classList.remove('show');
+            answerFeedback.style.display = 'none';
+            questionImage.innerHTML = '';
+            optionsContainer.innerHTML = '';
+            hintBtn.disabled = false;
+            answerBtn.disabled = false;
+            nextBtn.disabled = false;
+            hintBtn.style.display = 'block';
+            
+            // 检查是否还有问题
+            if (currentQuestions.length === 0) {
+                questionText.textContent = "恭喜！你已经完成了所有问题！";
+                hintBtn.disabled = true;
+                answerBtn.disabled = true;
+                nextBtn.disabled = true;
+                return;
+            }
+            
+            // 随机选择问题
+            const randomIndex = Math.floor(Math.random() * currentQuestions.length);
+            const questionObj = currentQuestions[randomIndex];
+            currentQuestions.splice(randomIndex, 1);
+            
+            // 更新问题
+            questionText.textContent = questionObj.question;
+            hintText.textContent = questionObj.hint || '暂无提示';
+            answerText.textContent = questionObj.answer;
+            
+            // 加载图片
+            if (questionObj.image) {
+                const img = new Image();
+                img.src = questionObj.image;
+                img.alt = "题目图片";
+                img.onerror = function() {
+                    const pathParts = this.src.split('/');
+                    const fileName = pathParts[pathParts.length - 1];
+                    questionImage.innerHTML = `
+                  <p class="error">
+                    图片加载失败: ${fileName}
+                  </p>
+                  `;
+                };
+                questionImage.appendChild(img);
+            }
+            
+            // 如果是选择题，生成选项
+            if (questionObj.options) {
+                hintBtn.style.display = 'none';
+                
+                questionObj.options.forEach((option, index) => {
+                    const optionBtn = document.createElement('button');
+                    optionBtn.className = 'option-btn';
+                    
+                    if (option.image) {
+                        const img = new Image();
+                        img.className = 'option-image';
+                        img.src = option.image;
+                        img.alt = option.text;
+                        img.onerror = function() {
+                            const pathParts = this.src.split('/');
+                            const fileName = pathParts[pathParts.length - 1];
+                            optionBtn.innerHTML = `
+                  <span>
+                    ${option.text}
+                  </span>
+                  <p class="error">
+                    图片加载失败: ${fileName}
+                  </p>
+                  `;
+                        };
+                        optionBtn.appendChild(img);
+                    }
+                    
+                    const textSpan = document.createElement('span');
+                    textSpan.textContent = option.text;
+                    optionBtn.appendChild(textSpan);
+                    
+                    optionBtn.addEventListener('click', () => {
+                        handleOptionSelect(index, questionObj.correctOption);
+                    });
+                    
+                    optionsContainer.appendChild(optionBtn);
+                });
+            }
+        }
+
+        // 显示答案
+        function showAnswer() {
+            answerArea.classList.add('show');
+            
+            // 如果是问答题且未回答，显示反馈按钮
+            const currentQuestion = currentQuestions[currentQuestionIndex];
+            if (!currentQuestion?.options && !isQuestionAnswered) {
+                answerFeedback.style.display = 'flex';
+            }
+        }
+
+        // 处理选项选择
+        function handleOptionSelect(selectedIndex, correctIndex) {
+            const optionBtns = document.querySelectorAll('.option-btn');
+            
+            optionBtns.forEach((btn, index) => {
+                btn.classList.remove('selected', 'correct', 'incorrect');
+                
+                if (index === selectedIndex) {
+                    btn.classList.add('selected');
+                    
+                    if (index === correctIndex) {
+                        btn.classList.add('correct');
+                        updateScore(true);
+                    } else {
+                        btn.classList.add('incorrect');
+                        // 高亮显示正确答案
+                        optionBtns[correctIndex].classList.add('correct');
+                        updateScore(false);
+                    }
+                }
+            });
+            
+            // 禁用所有选项按钮
+            optionBtns.forEach(btn => {
+                btn.disabled = true;
+            });
+            
+            // 标记为已回答
+            isQuestionAnswered = true;
+            answerFeedback.style.display = 'none';
+        }
+
+        // 处理反馈
+        function handleFeedback(isCorrect) {
+            updateScore(isCorrect);
+            answerFeedback.style.display = 'none';
+            isQuestionAnswered = true;
+        }
+
+        // 更新分数
+        function updateScore(isCorrect) {
+            totalAnswered++;
+            if (isCorrect) {
+                totalCorrect++;
+            }
+            
+            updateScoreDisplay();
+            saveScore();
+        }
+
+        // 更新分数显示
+        function updateScoreDisplay() {
+            correctCountEl.textContent = totalCorrect;
+            totalAnsweredEl.textContent = totalAnswered;
+        }
+
+        // 保存分数
+        function saveScore() {
+            localStorage.setItem('quizScore', JSON.stringify({
+                correct: totalCorrect,
+                total: totalAnswered
+            }));
+        }
+
+        // 重置分数
+        function resetScore() {
+            totalCorrect = 0;
+            totalAnswered = 0;
+            updateScoreDisplay();
+            saveScore();
+        }
+
+        // 初始化应用
+        init();
+                </script>
+              </body>
+            </html>
